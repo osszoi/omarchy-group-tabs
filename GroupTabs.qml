@@ -11,8 +11,8 @@ Item {
   property var ids: []
   property var chromeProfiles: ({})
 
-  readonly property string statePath: Quickshell.env("XDG_RUNTIME_DIR") + "/group-tabs.json"
-  readonly property string chromeDir: Quickshell.env("HOME") + "/.config/google-chrome"
+  property string statePath: Quickshell.env("XDG_RUNTIME_DIR") + "/group-tabs.json"
+  property string chromeDir: Quickshell.env("HOME") + "/.config/google-chrome"
 
   function apply(text) {
     var state
@@ -50,7 +50,22 @@ Item {
     onTriggered: stateFile.reload()
   }
 
+  // profile names live in chrome's Local State, which chrome rewrites all the time
+  FileView {
+    path: root.chromeDir + "/Local State"
+    watchChanges: true
+    printErrors: false
+    onFileChanged: profilesChanged.restart()
+  }
+
+  Timer {
+    id: profilesChanged
+    interval: 500
+    onTriggered: profilesReader.running = true
+  }
+
   Process {
+    id: profilesReader
     running: true
     command: ["jq", "-c", ".profile.info_cache | map_values(.name)", root.chromeDir + "/Local State"]
     stdout: StdioCollector {
