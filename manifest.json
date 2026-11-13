@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "eduardo.group-tabs",
+  "name": "Group tabs",
+  "version": "0.1.0",
+  "author": "Eduardo Lorenzo",
+  "license": "MIT",
+  "description": "Draws the tab strip of Hyprland window groups: app icon or Chrome profile avatar, clean titles and a sliding underline on the active tab.",
+  "kinds": [
+    "service"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "service": "GroupTabs.qml"
+  },
+  "homepage": "https://github.com/osszoi/omarchy-group-tabs"
+}
